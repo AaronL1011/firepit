@@ -1,0 +1,97 @@
+# specs/planning-context.yaml — written by elaborate-spec
+# (grilling session, confirmed by user)
+# Consumed by scope-work and slice-tasks.
+
+feature_name: "Firepit AI — manifesto + protocol sketch (v0)"
+
+problem_statement: >
+    AI agents operate with ambient, unbounded capability — full filesystems,
+    open network, persistent credentials, no visible boundary. Containment that
+    does exist is either expert-only infrastructure or vendor-granted policy;
+    in both cases it is invisible to the person who bears the risk. There is no
+    user-owned, legible form of AI containment. Firepit AI exists to provide
+    it.
+
+key_decisions:
+    - decision: "Central claim: containment must be user-owned"
+      rationale: >
+          The boundary belongs to the one who bears the risk, not the fire's
+          manufacturer. Bounded-by-default and legibility are necessary
+          conditions that make a vessel legitimate — properties of the
+          hierarchy, not co-equal claims. One claim for a skeptic to attack.
+    - decision: "Artifact: manifesto essay + protocol sketch, open draft repo"
+      rationale: >
+          Essay persuades; sketch makes it buildable. Repo is permissively
+          licensed, v0 explicitly marked draft / not-yet-a-standard. A standard
+          with zero implementations would be dishonest; a blog post can't accept
+          PRs.
+    - decision: "Fire metaphor extends rhetorically only, with a mapping rule"
+      rationale: >
+          Each extended fire-term must map to exactly one precise protocol
+          referent (sparks = escaping data fragments, wind = the network,
+          backdraft = prompt injection, smoke = the audit record). Unmappable
+          terms are cut. Keeps 'open, honest and simple' from becoming ornate
+          and fuzzy.
+    - decision: "Five invariants of a legitimate vessel, all hard requirements"
+      rationale: >
+          Bounded (declared fs/network/time/tool scope, nothing ambient),
+          Killable (deterministic extinguish, no cleanup debt), Legible (wielder
+          can state the boundary in one sentence), Auditable (complete
+          human-readable record of everything that crossed), Fail-closed (when
+          it breaks, the fire goes out). Each independently checkable; fits one
+          page. Deferring any invariant lets a vendor ship something 80% pit —
+          the dishonesty the project exists to prevent.
+    - decision: "Four named artifacts: Pit, Torch, Chimney, Extinguisher"
+      rationale: >
+          Pit = bounded session runtime. Torch = single-task ephemeral agent.
+          Chimney = declared egress channels. Extinguisher = standalone
+          universal kill-switch. Consequence accepted: the protocol needs a
+          test for whether an Extinguisher is real (it must kill vessels it
+          did not create).
+    - decision: "Positioning: name existing tooling, differentiate on ownership"
+      rationale: >
+          Existing containment is expert-operated infrastructure or
+          vendor-granted policy; Firepit is wielder-owned and a protocol, not a
+          product — a shape any runtime can conform to. One sentence,
+          pre-empts the 'just sandboxing' dismissal.
+    - decision: "Audience: builders first"
+      rationale: >
+          Engineers, toolmakers, agent-framework authors who could implement a
+          vessel this month. Direct technical register; the sketch is written
+          for them. Policy is the trajectory of the thesis, not the reader.
+    - decision: "The manifesto commits to building a reference Pit"
+      rationale: >
+          Closing act of the essay: the first vessel is being built and must
+          pass its own five invariants. Modest but real — first subject of the
+          conformance test. A protocol whose authors won't eat their own
+          cooking invites exactly the skepticism it disarms.
+
+out_of_scope:
+    - "Production tooling beyond the reference Pit"
+    - "Governance / standardization process (RFC-track machinery)"
+    - "Policy-audience or civil-society materials"
+    - "Hearth (persistent bounded memory) and fuel-provisioning concepts"
+
+constraints:
+    - "Protocol sketch must fit on one page of invariants"
+    - "Every fire-term used must map to exactly one protocol referent"
+    - "The reference Pit must pass the protocol's own five invariants"
+    - "Repo is permissively licensed and model-agnostic (bring your own fire)"
+
+success_criteria:
+    - >
+        Manifesto states the user-ownership thesis; the analogy's limit (local
+        vs transitive danger) is conceded via the wind/egress mapping rather
+        than a standalone section
+    - >
+        Protocol sketch defines the five invariants, each with an
+        independently checkable test
+    - "Four artifacts named with one-sentence definitions and their invariants"
+    - "One-sentence positioning against existing sandbox/guardrail tooling"
+    - >
+        Reference Pit exists, runs a real agent session inside declared scope,
+        and passes all five invariant checks
+
+# Open to-dos carried forward from grilling:
+# - Define the Extinguisher conformance test (must kill vessels it
+#   didn't create)
