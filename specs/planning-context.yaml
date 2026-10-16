@@ -15,9 +15,9 @@ problem_statement: >
 key_decisions:
     - decision: "Central claim: containment must be user-owned"
       rationale: >
-          The boundary belongs to the one who bears the risk, not the fire's
-          manufacturer. Bounded-by-default and legibility are necessary
-          conditions that make a vessel legitimate — properties of the
+          The boundary belongs to the one who bears the risk, not the model's
+          provider. Bounded-by-default and legibility are necessary
+          conditions that make a sandbox legitimate — properties of the
           hierarchy, not co-equal claims. One claim for a skeptic to attack.
     - decision: "Artifact: manifesto essay + protocol sketch, open draft repo"
       rationale: >
@@ -25,58 +25,111 @@ key_decisions:
           licensed, v0 explicitly marked draft / not-yet-a-standard. A standard
           with zero implementations would be dishonest; a blog post can't accept
           PRs.
-    - decision: "Fire metaphor extends rhetorically only, with a mapping rule"
+    - decision: "Fire metaphor stays in the name and the manifesto opening only"
       rationale: >
-          Each extended fire-term must map to exactly one precise protocol
-          referent (sparks = escaping data fragments, wind = the network,
-          backdraft = prompt injection, smoke = the audit record). Unmappable
-          terms are cut. Keeps 'open, honest and simple' from becoming ornate
-          and fuzzy.
-    - decision: "Five invariants of a legitimate vessel, all hard requirements"
+          Supersedes the earlier rule that extended fire terms (smoke, wind,
+          sparks, backdraft, chimney) could be used if each mapped to one
+          referent. In practice they made readers translate before they could
+          understand, which works against Legible. AI as a new fire, and the
+          call for tools to control it, carries the argument. The protocol,
+          deck and docs use industry terms: agent, owner, sandbox, runtime,
+          egress proxy, audit log, kill switch. Spike code keeps its original
+          identifiers.
+    - decision: "Five invariants of a legitimate sandbox, all hard requirements"
       rationale: >
           Bounded (declared fs/network/time/tool scope, nothing ambient),
-          Killable (deterministic extinguish, no cleanup debt), Legible (wielder
+          Killable (deterministic kill, no cleanup debt), Legible (owner
           can state the boundary in one sentence), Auditable (complete
           human-readable record of everything that crossed), Fail-closed (when
-          it breaks, the fire goes out). Each independently checkable; fits one
-          page. Deferring any invariant lets a vendor ship something 80% pit —
+          it breaks, the agent stops). Each independently checkable; fits one
+          page. Deferring any invariant lets a vendor ship something 80% contained —
           the dishonesty the project exists to prevent.
-    - decision: "Four named artifacts: Pit, Torch, Chimney, Extinguisher"
+    - decision: "Four named components: sandbox, one-shot sandbox, egress proxy, kill switch"
       rationale: >
-          Pit = bounded session runtime. Torch = single-task ephemeral agent.
-          Chimney = declared egress channels. Extinguisher = standalone
-          universal kill-switch. Consequence accepted: the protocol needs a
-          test for whether an Extinguisher is real (it must kill vessels it
+          Sandbox = bounded session. One-shot sandbox = single-task, killed
+          when the task ends. Egress proxy = the only network route out.
+          Kill switch = standalone, kills any conforming sandbox. Consequence accepted: the protocol needs a
+          test for whether a kill switch is real (it must kill sandboxes it
           did not create).
     - decision: "Positioning: name existing tooling, differentiate on ownership"
       rationale: >
           Existing containment is expert-operated infrastructure or
-          vendor-granted policy; Firepit is wielder-owned and a protocol, not a
-          product — a shape any runtime can conform to. One sentence,
-          pre-empts the 'just sandboxing' dismissal.
+          vendor-granted policy. Firepit is a sandbox whose boundary the
+          person running the agent declares, can read and can kill, and it is
+          a protocol, not a product: a shape any runtime can conform to. Owns
+          the 'just sandboxing' comparison instead of dodging it.
     - decision: "Audience: builders first"
       rationale: >
           Engineers, toolmakers, agent-framework authors who could implement a
-          vessel this month. Direct technical register; the sketch is written
+          runtime this month. Direct technical register; the sketch is written
           for them. Policy is the trajectory of the thesis, not the reader.
-    - decision: "The manifesto commits to building a reference Pit"
+    - decision: "The manifesto commits to building a reference runtime"
       rationale: >
-          Closing act of the essay: the first vessel is being built and must
+          Closing act of the essay: the first runtime is being built and must
           pass its own five invariants. Modest but real — first subject of the
           conformance test. A protocol whose authors won't eat their own
           cooking invites exactly the skepticism it disarms.
 
+    - decision: "Accept a one-time admin install where the OS requires it"
+      rationale: >
+          On stock Ubuntu, no-root Linux cannot make the egress proxy the only
+          network route (Landlock filters TCP by port only) or record file
+          egress before it happens. Closing both needs user namespaces, which
+          AppArmor restricts. A sandbox that holds four of five properties without
+          an install is the 80% sandbox the project exists to prevent. Cost: setup
+          is no longer zero-admin on Ubuntu 23.10+; running sandboxes stays
+          admin-free.
+
+    - decision: "The agent is everything acting on model output; the model is a net destination"
+      rationale: >
+          Harness flaws reach the host without the model misbehaving at all,
+          and tool-only sandboxes leave the harness outside the edge. Putting
+          the whole harness in the sandbox makes the model endpoint a declared
+          destination, and the rendering must say that anything the agent
+          reads can be sent there.
+    - decision: "Secrets never enter the sandbox; proxy injection is required"
+      rationale: >
+          A secret inside the sandbox can leave through any destination,
+          including the model endpoint. Each secret is bound to one
+          destination and added by the egress proxy. Cost: the proxy must end
+          TLS with a per-sandbox certificate authority, and credentials for
+          non-HTTP protocols cannot be declared in v0.
+    - decision: "max_denials is a required declaration field with no default"
+      rationale: >
+          Denials recorded but not acted on give an agent unbounded attempts at
+          its boundary. Matches time and resources: the owner states it. A denial is
+          only what the runtime can observe (proxy refusals and refused
+          system calls); undeclared things are absent, not denied.
+    - decision: "The boundary includes other agents and later agents"
+      rationale: >
+          Any writable state two sandboxes share becomes a channel between
+          them, and written output is how one agent leaves instructions for
+          the next. Sandboxes share nothing on the machine but declared paths,
+          and the rendering names every overlap.
+    - decision: "The audit log is evidence: header, JSON lines, hash chain"
+      rationale: >
+          Liability turns on records of the controls in place before an
+          incident. The header records only what the runtime observed; the
+          hash chain makes later edits visible. The owner can still
+          rewrite the whole chain; that is accepted.
+    - decision: "The conformance suite is a published, rerunnable deliverable"
+      rationale: >
+          Containment failures so far were configuration mistakes a one-time
+          review missed. A report anyone can rerun is evidence; a vendor's
+          own claim is not. Start also checks the seal from inside on
+          every run.
+
 out_of_scope:
-    - "Production tooling beyond the reference Pit"
+    - "Production tooling beyond the reference runtime"
     - "Governance / standardization process (RFC-track machinery)"
     - "Policy-audience or civil-society materials"
     - "Hearth (persistent bounded memory) and fuel-provisioning concepts"
 
 constraints:
     - "Protocol sketch must fit on one page of invariants"
-    - "Every fire-term used must map to exactly one protocol referent"
-    - "The reference Pit must pass the protocol's own five invariants"
-    - "Repo is permissively licensed and model-agnostic (bring your own fire)"
+    - "Fire language stays in the name and manifesto opening; everything else uses plain terms"
+    - "The reference runtime must pass the protocol's own five invariants"
+    - "Repo is permissively licensed and model-agnostic (bring your own model)"
 
 success_criteria:
     - >
@@ -89,9 +142,9 @@ success_criteria:
     - "Four artifacts named with one-sentence definitions and their invariants"
     - "One-sentence positioning against existing sandbox/guardrail tooling"
     - >
-        Reference Pit exists, runs a real agent session inside declared scope,
+        Reference runtime exists, runs a real agent session inside declared scope,
         and passes all five invariant checks
 
 # Open to-dos carried forward from grilling:
-# - Define the Extinguisher conformance test (must kill vessels it
+# - Define the kill switch conformance test (must kill sandboxes it
 #   didn't create)
